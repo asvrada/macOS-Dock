@@ -1,16 +1,14 @@
 import DrawGraph from "./components/DrawGraph";
 import Dock from "./components/Dock";
-import { Counter } from "./components/TestRedux";
 
 import "./App.css";
 
 function App() {
   return (
-    <>
-      <Counter />
-      <DrawGraph />
+    <div className="h-[1600px]">
+      {/* <DrawGraph /> */}
       <Dock />
-    </>
+    </div>
   );
 }
 

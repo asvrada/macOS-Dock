@@ -5,4 +5,13 @@ function normalDistribution(x, mean, stdDev) {
   // return coefficient * Math.exp(exponent);
 }
 
-export { normalDistribution };
+function normalDistributionWithDeadZone(x, mean, stdDev, deadZone) {
+  if (Math.abs(x) < deadZone) {
+    return 1;
+  }
+
+  const newX = x < 0 ? x + deadZone : x - deadZone;
+  return normalDistribution(newX, mean, stdDev);
+}
+
+export { normalDistribution, normalDistributionWithDeadZone };

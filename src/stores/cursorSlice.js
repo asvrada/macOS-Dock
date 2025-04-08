@@ -4,7 +4,8 @@ export const cursorSlice = createSlice({
   name: "cursor",
   initialState: {
     hovering: false,
-    x: 0,
+    // The global offset X in the container
+    globalOffsetX: 0,
   },
   reducers: {
     enter: (state) => {
@@ -14,7 +15,7 @@ export const cursorSlice = createSlice({
       state.hovering = false;
     },
     update: (state, action) => {
-      state.x = action.payload;
+      state.globalOffsetX = action.payload.globalOffsetX;
     },
   },
 });

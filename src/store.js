@@ -1,10 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
-import counterReducer from "./stores/counterSlice";
 import cursorReducer from "./stores/cursorSlice";
+import animationReducer from "./stores/animationSlice";
 
 export default configureStore({
   reducer: {
-    counter: counterReducer,
     cursor: cursorReducer,
+    animation: animationReducer,
   },
 });
