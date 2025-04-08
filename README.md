@@ -1,4 +1,24 @@
-# React + Vite
+# macOS Dock Remake - Focus on animation only
+
+This project remakes the macOS Dock using React, Redux and Tailwind CSS.
+
+It doesn't mimic any actual function of the Dock, like launch apps. This project focuses on the interaction/animation of the Dock, specifically the "magnification" effect when hovering over an app icon.
+
+Again, this is a toy project, it has no actual use or functionality.
+
+## Setup Project
+
+After cloning the repository, run `npm install` to install the dependencies.
+
+## Build
+
+`npm run build`
+
+## Live Development Env
+
+`npm run dev`
+
+---
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
