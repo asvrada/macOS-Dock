@@ -13,16 +13,33 @@ import {
 
 import { calAreaWithDeadzone } from "../utils/triangle";
 
+/** Number of icons in the dock */
 const COUNT = 13;
+/** Base width/height of each icon in pixels */
 const WIDTH = 50;
+/** Maximum size increase (in pixels) when hovering */
 const SIZE_GROW = 26;
 
+/**
+ * Calculate the horizontal offset of the cursor relative to the container's left edge.
+ *
+ * @param {DOMRect} rect - Bounding client rect of the container element
+ * @param {number} clientX - The mouse event's clientX coordinate
+ * @returns {number} The horizontal offset in pixels from the container's left edge
+ */
 const calOffset = (rect, clientX) => {
   const globalOffsetX = clientX - rect.left;
 
   return globalOffsetX;
 };
 
+/**
+ * Calculate which block index the cursor is over based on horizontal offset.
+ *
+ * @param {number} globalOffsetX - Horizontal offset from container's left edge
+ * @param {number} blockWidth - Width of each block in pixels
+ * @returns {number} Block index (0-based, clamped to [0, COUNT-1])
+ */
 const calIdx = (globalOffsetX, blockWidth) => {
   // The range of globalOffsetX is [0, COUNT * blockWidth]
   // When it is at COUNT * blockWidth, the calculated index will be COUNT
@@ -32,13 +49,16 @@ const calIdx = (globalOffsetX, blockWidth) => {
 };
 
 /**
+ * A single icon block in the virtual (visible) dock layer.
+ * Renders with dynamic size based on cursor proximity.
  *
- * @param {idx} the index of this block, 0-based
- * @param {isHovering} is mouse hovering over Dock?
- * @param {hovering} index of the block cursor is hovering
- * @param {content} Content of this block to display
- * @param {size} width and height (they are the same) of this block
- * @returns
+ * @param {Object} props
+ * @param {number} props.idx - The index of this block (0-based)
+ * @param {boolean} props.isHovering - Whether the mouse is hovering over the Dock
+ * @param {number} props.hovering - Index of the block the cursor is currently over
+ * @param {number|string} props.content - Content to display inside the block
+ * @param {number} props.size - Width and height of the block in pixels (square)
+ * @returns {JSX.Element}
  */
 function VirtualBlock({ idx, isHovering, hovering, content, size }) {
   const bg = isHovering && idx === hovering ? "bg-yellow-200" : "bg-yellow-100";
@@ -66,6 +86,12 @@ function VirtualBlock({ idx, isHovering, hovering, content, size }) {
   );
 }
 
+/**
+ * The visible dock layer that renders icons with magnification animation.
+ * Computes per-icon sizes based on cursor distance and applies lerp animation.
+ *
+ * @returns {JSX.Element}
+ */
 function VirtualDock() {
   const dispatch = useDispatch();
   const [ready, setReady] = useState(false);
@@ -162,6 +188,14 @@ function VirtualDock() {
   );
 }
 
+/**
+ * A single block in the physical (invisible) dock layer used for hit detection.
+ *
+ * @param {Object} props
+ * @param {number} props.num - The block number/label to display
+ * @param {boolean} props.grow - Whether to expand height (when dock is hovered)
+ * @returns {JSX.Element}
+ */
 function PhysicalBlock({ num, grow }) {
   // 8 is the bottom margin
   const baseHeight = WIDTH + 8;
@@ -177,6 +211,13 @@ function PhysicalBlock({ num, grow }) {
   );
 }
 
+/**
+ * The invisible dock layer that captures mouse events.
+ * Positioned at the bottom of the screen with opacity 0 to handle
+ * mouse enter/leave/move events without visual interference.
+ *
+ * @returns {JSX.Element}
+ */
 function PhysicalDock() {
   const dispatch = useDispatch();
   const isHovering = useSelector((state) => state.cursor.hovering);
@@ -229,6 +270,12 @@ function PhysicalDock() {
   );
 }
 
+/**
+ * Main Dock component that composes VirtualDock and PhysicalDock.
+ * Sets up a global animation timer (~60fps) for smooth size transitions.
+ *
+ * @returns {JSX.Element}
+ */
 function Dock() {
   const dispatch = useDispatch();
 
